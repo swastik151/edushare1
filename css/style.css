@@ -273,3 +273,49 @@ footer{
     font-size: 14px;
     color: #dbeafe;
 }
+/* FINAL CHAT DESIGN */
+
+.chat-box {
+    width: 90%;
+    max-width: 700px;
+    height: 450px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.chat-input {
+    width: 90%;
+    max-width: 700px;
+    margin: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.chat-input button {
+    padding: 12px 20px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.message {
+    background: #2563eb;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin: 10px 0;
+    max-width: 75%;
+}
