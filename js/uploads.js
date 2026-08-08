@@ -20,37 +20,27 @@ onValue(uploadsRef, (snapshot) => {
 
     const uploads = snapshot.val();
 
-    Object.entries(uploads).reverse().forEach(([id, upload]) => {
+    Object.values(uploads).reverse().forEach((upload) => {
 
         const card = document.createElement("div");
 
+        card.className = "upload-card";
+
         card.innerHTML = `
-            <div style="
-                background: white;
-                padding: 20px;
-                margin: 20px 0;
-                border-radius: 15px;
-            ">
+            <h3>${upload.subject || "General"}</h3>
 
-                <h3>${upload.name || "EduShare Image"}</h3>
+            <p>${upload.name || "Uploaded material"}</p>
 
-                <img
-                    src="${upload.url}"
-                    alt="${upload.name || "Uploaded image"}"
-                    style="
-                        max-width: 500px;
-                        width: 100%;
-                        border-radius: 12px;
-                    "
-                >
+            <img
+                src="${upload.url}"
+                alt="${upload.name || "Uploaded image"}"
+            >
 
-                <br><br>
+            <br>
 
-                <a href="${upload.url}" target="_blank">
-                    Open Full Image
-                </a>
-
-            </div>
+            <a href="${upload.url}" target="_blank">
+                Open Full Image
+            </a>
         `;
 
         uploadsContainer.appendChild(card);
