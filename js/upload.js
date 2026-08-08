@@ -5,96 +5,77 @@ import {
     push
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
+const CLOUD_NAME = "pnzbxjfn";
+const UPLOAD_PRESET = "edushare_upload";
 
-const uploadBtn = document.getElementById("uploadBtn");
 const imageInput = document.getElementById("imageInput");
-const preview = document.getElementById("preview");
+const uploadBtn = document.getElementById("uploadBtn");
 const status = document.getElementById("status");
-
+const preview = document.getElementById("preview");
+const subject = document.getElementById("subject");
 
 uploadBtn.addEventListener("click", async () => {
 
     const file = imageInput.files[0];
+    const selectedSubject = subject.value;
 
-    if (!file) {
-        status.textContent = "Please choose a picture first!";
+    if (!selectedSubject) {
+        status.textContent = "Please choose a subject.";
         return;
     }
 
+    if (!file) {
+        status.textContent = "Please select a picture first.";
+        return;
+    }
+
+    status.textContent = "Uploading...";
 
     const formData = new FormData();
 
     formData.append("file", file);
-
-    formData.append(
-        "upload_preset",
-        "edushare_upload"
-    );
-
+    formData.append("upload_preset", UPLOAD_PRESET);
 
     try {
 
-        uploadBtn.disabled = true;
-        uploadBtn.textContent = "Uploading...";
-        status.textContent = "Uploading picture...";
-
-
         // Upload to Cloudinary
         const response = await fetch(
-            "https://api.cloudinary.com/v1_1/pnzbxjfn/image/upload",
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
             {
                 method: "POST",
                 body: formData
             }
         );
 
-
         const data = await response.json();
 
-
         if (!data.secure_url) {
-
-            console.error(data);
-
-            status.textContent = "Upload failed!";
+            status.textContent = "Cloudinary upload failed.";
+            console.log(data);
             return;
         }
 
-
-        // Save Cloudinary URL to Firebase
-        const uploadsRef = ref(db, "uploads");
-
-        await push(uploadsRef, {
-
+        // Save to Firebase
+        await push(ref(db, "uploads"), {
             url: data.secure_url,
-
+            name: file.name,
+            subject: selectedSubject,
             uploadedAt: Date.now()
-
         });
 
+        status.textContent = "Picture uploaded successfully!";
 
-        // Show preview
         preview.src = data.secure_url;
-
         preview.style.display = "block";
 
-
-        status.textContent =
-            "Picture uploaded successfully! 🎉";
-
+        imageInput.value = "";
+        subject.value = "";
 
     } catch (error) {
 
         console.error(error);
-
-        status.textContent =
-            "Something went wrong!";
+        status.textContent = "Upload error.";
 
     }
-
-
-    uploadBtn.disabled = false;
-
-    uploadBtn.textContent = "Upload Picture";
 
 });
