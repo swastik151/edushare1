@@ -12,14 +12,22 @@
 
 <body>
 
-<header>
     <h1>EduShare</h1>
-    <p>Upload Study Material</p>
-</header>
-
-<main>
 
     <h2>Upload Picture</h2>
+
+    <label for="subject">Choose Subject</label>
+
+    <select id="subject">
+        <option value="">Select a subject</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Science">Science</option>
+        <option value="English">English</option>
+        <option value="Social Science">Social Science</option>
+        <option value="Computer">Computer</option>
+    </select>
+
+    <br><br>
 
     <input type="file" id="imageInput" accept="image/*">
 
@@ -38,9 +46,7 @@
         style="display:none; max-width:500px; border-radius:12px;"
     >
 
-</main>
-
-<script type="module" src="js/upload.js"></script>
+    <script type="module" src="js/upload.js"></script>
 
 </body>
 
