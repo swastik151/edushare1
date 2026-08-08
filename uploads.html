@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>EduShare Uploads</title>
+    <title>EduShare - Uploads</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <h1>EduShare Uploads</h1>
+    <header class="uploads-header">
+        <h1>EduShare</h1>
+        <p>Study materials shared by your class</p>
+    </header>
 
-    <div id="uploadsContainer"></div>
+    <main class="uploads-page">
+
+        <div class="uploads-top">
+            <div>
+                <h2>📚 Shared Materials</h2>
+                <p>View pictures and study materials uploaded to EduShare.</p>
+            </div>
+
+            <a href="upload.html" class="upload-button">
+                + Upload
+            </a>
+        </div>
+
+        <div id="uploadsContainer" class="uploads-grid"></div>
+
+    </main>
 
     <script type="module" src="js/uploads.js"></script>
 
 </body>
+
 </html>
