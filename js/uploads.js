@@ -1,3 +1,4 @@
+```javascript
 import { db } from "./firebase.js";
 
 import {
@@ -18,32 +19,60 @@ onValue(uploadsRef, (snapshot) => {
         return;
     }
 
-    const uploads = snapshot.val();
+    const uploads = Object.values(snapshot.val()).reverse();
 
-    Object.values(uploads).reverse().forEach((upload) => {
+    // Create subject groups
+    const subjects = {};
 
-        const card = document.createElement("div");
+    uploads.forEach((upload) => {
 
-        card.className = "upload-card";
+        const subject = upload.subject || "General";
 
-        card.innerHTML = `
-            <h3>${upload.subject || "General"}</h3>
+        if (!subjects[subject]) {
+            subjects[subject] = [];
+        }
 
-            <p>${upload.name || "Uploaded material"}</p>
-
-            <img
-                src="${upload.url}"
-                alt="${upload.name || "Uploaded image"}"
-            >
-
-            <br>
-
-            <a href="${upload.url}" target="_blank">
-                Open Full Image
-            </a>
-        `;
-
-        uploadsContainer.appendChild(card);
+        subjects[subject].push(upload);
     });
 
+    // Display each subject
+    Object.keys(subjects).forEach((subject) => {
+
+        const section = document.createElement("section");
+        section.className = "subject-section";
+
+        section.innerHTML = `
+            <h2 class="subject-title">📚 ${subject}</h2>
+            <div class="uploads-grid"></div>
+        `;
+
+        const grid = section.querySelector(".uploads-grid");
+
+        subjects[subject].forEach((upload) => {
+
+            const card = document.createElement("div");
+
+            card.className = "upload-card";
+
+            card.innerHTML = `
+                <h3>${upload.name || "Uploaded material"}</h3>
+
+                <img
+                    src="${upload.url}"
+                    alt="${upload.name || "Uploaded image"}"
+                >
+
+                <br>
+
+                <a href="${upload.url}" target="_blank">
+                    Open Full Image
+                </a>
+            `;
+
+            grid.appendChild(card);
+        });
+
+        uploadsContainer.appendChild(section);
+    });
 });
+```
