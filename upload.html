@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,42 +13,101 @@
 
 <body>
 
-    <h1>EduShare</h1>
+    <header class="uploads-header">
+        <h1>📚 EduShare</h1>
+        <p>Share helpful study materials with your class</p>
+    </header>
 
-    <h2>Upload Picture</h2>
+    <main class="upload-page">
 
-    <label for="subject">Choose Subject</label>
+        <div class="upload-card">
 
-    <select id="subject">
-        <option value="">Select a subject</option>
-        <option value="Mathematics">Mathematics</option>
-        <option value="Science">Science</option>
-        <option value="English">English</option>
-        <option value="Social Science">Social Science</option>
-        <option value="Computer">Computer</option>
-    </select>
+            <div class="upload-title">
+                <div class="upload-icon">📤</div>
 
-    <br><br>
+                <h2>Upload Study Material</h2>
 
-    <input type="file" id="imageInput" accept="image/*">
+                <p>
+                    Add notes, diagrams, worksheets, or other helpful
+                    study materials.
+                </p>
+            </div>
 
-    <br><br>
+            <!-- SUBJECT -->
+            <div class="form-group">
 
-    <button id="uploadBtn">
-        Upload Picture
-    </button>
+                <label for="subject">
+                    📚 Choose a subject
+                </label>
 
-    <p id="status"></p>
+                <select id="subject">
+                    <option value="">Select a subject</option>
+                    <option value="Mathematics">📐 Mathematics</option>
+                    <option value="Science">🔬 Science</option>
+                    <option value="English">📖 English</option>
+                    <option value="Social Science">🌍 Social Science</option>
+                    <option value="Computer">💻 Computer</option>
+                </select>
 
-    <br>
+            </div>
 
-    <img
-        id="preview"
-        style="display:none; max-width:500px; border-radius:12px;"
-    >
+            <!-- FILE -->
+            <div class="form-group">
+
+                <label>
+                    📎 Choose your material
+                </label>
+
+                <label for="imageInput" class="file-drop">
+
+                    <span class="file-icon">📄</span>
+
+                    <strong>Click to choose a file</strong>
+
+                    <small>
+                        Images, notes and study materials
+                    </small>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                >
+
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="preview-area">
+
+                <img
+                    id="preview"
+                    style="display:none;"
+                    alt="Selected material preview"
+                >
+
+            </div>
+
+            <!-- UPLOAD BUTTON -->
+            <button id="uploadBtn" class="main-upload-button">
+                ⬆️ Upload Material
+            </button>
+
+            <!-- STATUS -->
+            <p id="status" class="upload-status"></p>
+
+            <a href="uploads.html" class="back-link">
+                ← View shared materials
+            </a>
+
+        </div>
+
+    </main>
 
     <script type="module" src="js/upload.js"></script>
 
 </body>
 
 </html>
+```
