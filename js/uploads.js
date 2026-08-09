@@ -1,4 +1,3 @@
-```javascript
 import { db } from "./firebase.js";
 
 import {
@@ -6,12 +5,14 @@ import {
     onValue
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
+const subjectButtons = document.getElementById("subjectButtons");
 const uploadsContainer = document.getElementById("uploadsContainer");
 
 const uploadsRef = ref(db, "uploads");
 
 onValue(uploadsRef, (snapshot) => {
 
+    subjectButtons.innerHTML = "";
     uploadsContainer.innerHTML = "";
 
     if (!snapshot.exists()) {
@@ -21,7 +22,7 @@ onValue(uploadsRef, (snapshot) => {
 
     const uploads = Object.values(snapshot.val()).reverse();
 
-    // Create subject groups
+    // Get all subjects
     const subjects = {};
 
     uploads.forEach((upload) => {
@@ -35,20 +36,43 @@ onValue(uploadsRef, (snapshot) => {
         subjects[subject].push(upload);
     });
 
-    // Display each subject
+    // Create a button for every subject
     Object.keys(subjects).forEach((subject) => {
 
-        const section = document.createElement("section");
-        section.className = "subject-section";
+        const button = document.createElement("button");
 
-        section.innerHTML = `
-            <h2 class="subject-title">📚 ${subject}</h2>
-            <div class="uploads-grid"></div>
+        button.className = "subject-button";
+        button.textContent = subject;
+
+        button.addEventListener("click", () => {
+
+            showSubject(subject, subjects[subject]);
+
+        });
+
+        subjectButtons.appendChild(button);
+    });
+
+    // Show the first subject automatically
+    const firstSubject = Object.keys(subjects)[0];
+
+    showSubject(firstSubject, subjects[firstSubject]);
+
+
+    function showSubject(subject, files) {
+
+        uploadsContainer.innerHTML = `
+            <div class="subject-heading">
+                <h2>📚 ${subject}</h2>
+                <p>Study materials for ${subject}</p>
+            </div>
         `;
 
-        const grid = section.querySelector(".uploads-grid");
+        const grid = document.createElement("div");
 
-        subjects[subject].forEach((upload) => {
+        grid.className = "uploads-grid";
+
+        files.forEach((upload) => {
 
             const card = document.createElement("div");
 
@@ -72,7 +96,7 @@ onValue(uploadsRef, (snapshot) => {
             grid.appendChild(card);
         });
 
-        uploadsContainer.appendChild(section);
-    });
+        uploadsContainer.appendChild(grid);
+    }
+
 });
-```
