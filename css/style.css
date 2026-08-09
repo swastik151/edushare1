@@ -931,3 +931,102 @@ footer{
     }
 
 }
+/* =========================
+   SUBJECT BUTTONS
+========================= */
+
+.subject-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.subject-button {
+    padding: 18px 15px;
+    border: none;
+    border-radius: 16px;
+    background: white;
+    color: #2563eb;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.10);
+    transition: 0.2s;
+}
+
+.subject-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.18);
+}
+
+.subject-button:active {
+    transform: scale(0.97);
+}
+
+/* =========================
+   SELECTED SUBJECT
+========================= */
+
+.subject-heading {
+    margin: 30px 0 20px;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2563eb, #4f8cff);
+    color: white;
+}
+
+.subject-heading h2 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.subject-heading p {
+    margin: 5px 0 0;
+    opacity: 0.9;
+}
+
+/* =========================
+   UPLOAD CARDS
+========================= */
+
+.upload-card {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: 0.2s;
+}
+
+.upload-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.15);
+}
+
+.upload-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.upload-card img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #f4f6fb;
+}
+
+.upload-card a {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.upload-card a:hover {
+    background: #1d4ed8;
+}
