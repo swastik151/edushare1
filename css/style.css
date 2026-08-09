@@ -764,3 +764,170 @@ footer{
         padding: 12px;
     }
 }
+/* =========================
+   UPLOAD PAGE
+========================= */
+
+.upload-page {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+}
+
+.upload-card {
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.12);
+}
+
+.upload-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.upload-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.upload-title h2 {
+    margin: 0 0 8px;
+    color: #2563eb;
+    font-size: 30px;
+}
+
+.upload-title p {
+    color: #666;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label:first-child {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#subject {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #dbe5ff;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #f8faff;
+    cursor: pointer;
+}
+
+#subject:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.file-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    padding: 25px;
+    border: 2px dashed #9bb7ff;
+    border-radius: 16px;
+    background: #f7f9ff;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.file-drop:hover {
+    background: #eef4ff;
+    border-color: #2563eb;
+}
+
+.file-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+}
+
+.file-drop strong {
+    color: #2563eb;
+    font-size: 17px;
+}
+
+.file-drop small {
+    color: #777;
+    margin-top: 5px;
+}
+
+#imageInput {
+    display: none;
+}
+
+.preview-area {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#preview {
+    max-width: 100%;
+    max-height: 350px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.main-upload-button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #4f8cff);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.main-upload-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+.upload-status {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 18px;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+
+    .upload-card {
+        padding: 25px 20px;
+    }
+
+    .upload-title h2 {
+        font-size: 25px;
+    }
+
+}
