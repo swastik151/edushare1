@@ -38,9 +38,12 @@
     <h2>📢 Announcements</h2>
 
     <div id="announcementBox" class="card">
-        <h3>Loading announcements...</h3>
-    </div>
-</section>
+    <h3>Loading announcements...</h3>
+</div>
+
+<button onclick="teacherLogin()" class="teacher-btn">
+    🔐 Teacher Post
+</button>
 
 <section class="subjects">
 <section class="subjects">
@@ -129,5 +132,16 @@
 
 <script type="module" src="js/script.js"></script>
 <script type="module" src="js/announcements.js"></script>
+    <script>
+function teacherLogin() {
+    const password = prompt("🔐 Enter Teacher Password:");
+
+    if (password === "1234") {
+        window.location.href = "admin.html";
+    } else if (password !== null) {
+        alert("❌ Incorrect password!");
+    }
+}
+</script>
 </body>
 </html>
