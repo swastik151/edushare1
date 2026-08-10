@@ -1,25 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduShare Admin</title>
+
+    <title>EduShare Teacher Panel</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<h1>👨‍🏫 Teacher Admin Panel</h1>
+    <div class="admin-page">
 
-<textarea id="announcement" rows="6" cols="50"
-placeholder="School starts at 8:30 AM tomorrow."></textarea>
+        <div class="admin-card">
 
-<br><br>
+            <div class="admin-icon">
+                👨‍🏫
+            </div>
 
-<button id="postBtn">Post Announcement</button>
+            <h1>Teacher Admin Panel</h1>
 
-<p id="status"></p>
+            <p class="admin-subtitle">
+                Post an announcement for everyone on EduShare.
+            </p>
 
-<script type="module" src="js/admin.js"></script>
+            <div class="announcement-form">
+
+                <label for="announcement">
+                    📢 New Announcement
+                </label>
+
+                <textarea
+                    id="announcement"
+                    placeholder="Write your announcement here..."
+                    rows="6"></textarea>
+
+                <button id="postBtn">
+                    📢 Post Announcement
+                </button>
+
+                <p id="status"></p>
+
+            </div>
+
+            <a href="index.html" class="back-home">
+                ← Back to EduShare
+            </a>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
 
 </body>
+
 </html>
