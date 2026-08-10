@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>EduShare Chat</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-    <h1>EduShare Chat</h1>
+    <header class="chat-header">
+        <div>
+            <h1>💬 EduShare Chat</h1>
+            <p>Talk, discuss, and learn together.</p>
+        </div>
+    </header>
 
-<div class="chat-container">
+    <main class="chat-page">
 
-    <div id="chatBox" class="chat-box"></div>
+        <div class="chat-container">
 
-    <div class="chat-input">
-        <input type="text" id="username" placeholder="Your Name">
+            <div id="chatBox" class="chat-box">
+                <div class="chat-welcome">
+                    <div class="welcome-icon">💬</div>
+                    <h2>Welcome to EduShare Chat</h2>
+                    <p>Start a conversation with your classmates.</p>
+                </div>
+            </div>
 
-        <input type="text" id="message" placeholder="Type a message...">
+            <div class="chat-input">
 
-        <button id="sendBtn">Send</button>
-    </div>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your name"
+                    autocomplete="off"
+                >
 
-</div>
+                <input
+                    type="text"
+                    id="message"
+                    placeholder="Type a message..."
+                    autocomplete="off"
+                >
 
-<div class="chat-input">
-    <input type="text" id="username" placeholder="Your Name">
-    <input type="text" id="message" placeholder="Type a message...">
-    <button id="sendBtn">Send</button>
-</div>
+                <button id="sendBtn">
+                    ➤
+                </button>
 
-<script type="module" src="js/chat.js"></script>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script type="module" src="js/chat.js"></script>
+
 </body>
 </html>
