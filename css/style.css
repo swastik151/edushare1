@@ -1490,3 +1490,21 @@ footer > p {
         max-width: 85%;
     }
 }
+.chat-container {
+    width: 95%;
+    max-width: 1100px;
+    height: 78vh;
+    margin: 0 auto;
+}
+
+.chat-box {
+    width: 100%;
+}
+
+.chat-input {
+    width: 100%;
+}
+
+#message {
+    width: 100%;
+}
