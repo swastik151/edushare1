@@ -12,7 +12,6 @@ const addStudent = document.getElementById("addStudent");
 const studentList = document.getElementById("studentList");
 const today = document.getElementById("today");
 
-// Get today's date
 const todayKey = new Date().toISOString().split("T")[0];
 
 today.textContent = new Date().toLocaleDateString(undefined, {
@@ -22,17 +21,30 @@ today.textContent = new Date().toLocaleDateString(undefined, {
     day: "numeric"
 });
 
-// Firebase locations
 const studentsRef = ref(db, "students");
 const attendanceRef = ref(db, `attendance/${todayKey}`);
 
+let students = {};
+let attendance = {};
+
+// -------------------------
 // ADD STUDENT
-addStudent.addEventListener("click", () => {
+// -------------------------
+
+addStudent.addEventListener("click", addNewStudent);
+
+studentName.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        addNewStudent();
+    }
+});
+
+function addNewStudent() {
 
     const name = studentName.value.trim();
 
     if (name === "") {
-        alert("Please enter a student name.");
+        alert("Enter a student name first!");
         return;
     }
 
@@ -40,26 +52,60 @@ addStudent.addEventListener("click", () => {
 
     set(newStudent, {
         name: name
+    })
+    .then(() => {
+        studentName.value = "";
+    })
+    .catch((error) => {
+        alert("Could not add student: " + error.message);
     });
+}
 
-    studentName.value = "";
-});
+// -------------------------
+// LOAD STUDENTS
+// -------------------------
 
-// Press Enter to add student
-studentName.addEventListener("keydown", (event) => {
+onValue(studentsRef, (snapshot) => {
 
-    if (event.key === "Enter") {
-        addStudent.click();
+    students = {};
+
+    if (snapshot.exists()) {
+        snapshot.forEach((child) => {
+            students[child.key] = child.val();
+        });
     }
 
+    renderStudents();
 });
 
-// LOAD STUDENTS
-onValue(studentsRef, (snapshot) => {
+// -------------------------
+// LOAD TODAY'S ATTENDANCE
+// -------------------------
+
+onValue(attendanceRef, (snapshot) => {
+
+    attendance = {};
+
+    if (snapshot.exists()) {
+        snapshot.forEach((child) => {
+            attendance[child.key] = child.val();
+        });
+    }
+
+    renderStudents();
+});
+
+// -------------------------
+// DISPLAY STUDENTS
+// -------------------------
+
+function renderStudents() {
 
     studentList.innerHTML = "";
 
-    if (!snapshot.exists()) {
+    const studentIds = Object.keys(students);
+
+    if (studentIds.length === 0) {
 
         studentList.innerHTML = `
             <div class="empty">
@@ -70,94 +116,101 @@ onValue(studentsRef, (snapshot) => {
         return;
     }
 
-    // Get today's attendance
-    onValue(attendanceRef, (attendanceSnapshot) => {
+    studentIds.forEach((studentId) => {
 
-        studentList.innerHTML = "";
+        const student = students[studentId];
+        const record = attendance[studentId];
 
-        snapshot.forEach((child) => {
+        const studentDiv = document.createElement("div");
 
-            const student = child.val();
-            const studentId = child.key;
+        studentDiv.className = "student";
 
-            const attendance = attendanceSnapshot.child(studentId).val();
+        studentDiv.innerHTML = `
+            <div class="student-name">
+                ${student.name}
+            </div>
 
-            const studentDiv = document.createElement("div");
+            <div class="status-buttons">
 
-            studentDiv.className = "student";
+                <button class="present">
+                    ✓ Present
+                </button>
 
-            studentDiv.innerHTML = `
-                <div class="student-name">
-                    ${student.name}
-                </div>
+                <button class="absent">
+                    ✕ Absent
+                </button>
 
-                <div class="status-buttons">
+            </div>
+        `;
 
-                    <button class="present ${
-                        attendance?.status === "Present"
-                            ? "selected"
-                            : ""
-                    }">
-                        ✓ Present
-                    </button>
+        const presentButton =
+            studentDiv.querySelector(".present");
 
-                    <button class="absent ${
-                        attendance?.status === "Absent"
-                            ? "selected"
-                            : ""
-                    }">
-                        ✕ Absent
-                    </button>
+        const absentButton =
+            studentDiv.querySelector(".absent");
 
-                </div>
-            `;
+        // Show saved status
+        if (record?.status === "Present") {
+            presentButton.classList.add("selected");
+        }
 
-            const presentButton =
-                studentDiv.querySelector(".present");
+        if (record?.status === "Absent") {
+            absentButton.classList.add("selected");
+        }
 
-            const absentButton =
-                studentDiv.querySelector(".absent");
+        // PRESENT
+        presentButton.addEventListener("click", () => {
 
-            presentButton.addEventListener("click", () => {
+            presentButton.classList.add("selected");
+            absentButton.classList.remove("selected");
 
-                markAttendance(
-                    studentId,
-                    student.name,
-                    "Present"
-                );
-
-            });
-
-            absentButton.addEventListener("click", () => {
-
-                markAttendance(
-                    studentId,
-                    student.name,
-                    "Absent"
-                );
-
-            });
-
-            studentList.appendChild(studentDiv);
+            saveAttendance(
+                studentId,
+                student.name,
+                "Present"
+            );
 
         });
 
+        // ABSENT
+        absentButton.addEventListener("click", () => {
+
+            absentButton.classList.add("selected");
+            presentButton.classList.remove("selected");
+
+            saveAttendance(
+                studentId,
+                student.name,
+                "Absent"
+            );
+
+        });
+
+        studentList.appendChild(studentDiv);
+
     });
+}
 
-});
-
+// -------------------------
 // SAVE ATTENDANCE
-function markAttendance(studentId, name, status) {
+// -------------------------
 
-    const studentAttendanceRef =
+function saveAttendance(studentId, name, status) {
+
+    const recordRef =
         ref(db, `attendance/${todayKey}/${studentId}`);
 
-    set(studentAttendanceRef, {
-
+    set(recordRef, {
         name: name,
         status: status,
         date: todayKey
+    })
+    .catch((error) => {
+
+        alert(
+            "Attendance could not be saved: " +
+            error.message
+        );
 
     });
-
 }
