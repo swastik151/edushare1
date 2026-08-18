@@ -5,14 +5,14 @@ import {
     push,
     set,
     onValue
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebasejs/12.1.0/firebase-database.js";
 
 const studentName = document.getElementById("studentName");
 const addStudent = document.getElementById("addStudent");
 const studentList = document.getElementById("studentList");
 const today = document.getElementById("today");
 
-const todayKey = new Date().toISOString().split("T")[0];
+const todayKey = new Date().toLocaleDateString("en-CA");
 
 today.textContent = new Date().toLocaleDateString(undefined, {
     weekday: "long",
@@ -22,6 +22,7 @@ today.textContent = new Date().toLocaleDateString(undefined, {
 });
 
 const studentsRef = ref(db, "students");
+const todayAttendanceRef = ref(db, `attendance/${todayKey}`);
 
 addStudent.addEventListener("click", () => {
     const name = studentName.value.trim();
@@ -59,47 +60,70 @@ onValue(studentsRef, (snapshot) => {
         return;
     }
 
-    snapshot.forEach((child) => {
+    onValue(todayAttendanceRef, (attendanceSnapshot) => {
 
-        const student = child.val();
+        studentList.innerHTML = "";
 
-        const studentDiv = document.createElement("div");
-        studentDiv.className = "student";
+        snapshot.forEach((child) => {
 
-        studentDiv.innerHTML = `
-            <div class="student-name">
-                ${student.name}
-            </div>
+            const student = child.val();
+            const attendance = attendanceSnapshot.child(child.key).val();
 
-            <div class="status-buttons">
+            const studentDiv = document.createElement("div");
+            studentDiv.className = "student";
 
-                <button class="present">
-                    ✓ Present
-                </button>
+            studentDiv.innerHTML = `
+                <div class="student-name">
+                    ${student.name}
+                </div>
 
-                <button class="absent">
-                    ✕ Absent
-                </button>
+                <div class="status-buttons">
 
-            </div>
-        `;
+                    <button class="present ${
+                        attendance?.status === "Present" ? "selected" : ""
+                    }">
+                        ✓ Present
+                    </button>
 
-        const presentButton = studentDiv.querySelector(".present");
-        const absentButton = studentDiv.querySelector(".absent");
+                    <button class="absent ${
+                        attendance?.status === "Absent" ? "selected" : ""
+                    }">
+                        ✕ Absent
+                    </button>
 
-        presentButton.addEventListener("click", () => {
-            markAttendance(child.key, student.name, "Present", presentButton, absentButton);
+                </div>
+            `;
+
+            const presentButton =
+                studentDiv.querySelector(".present");
+
+            const absentButton =
+                studentDiv.querySelector(".absent");
+
+            presentButton.addEventListener("click", () => {
+                markAttendance(
+                    child.key,
+                    student.name,
+                    "Present"
+                );
+            });
+
+            absentButton.addEventListener("click", () => {
+                markAttendance(
+                    child.key,
+                    student.name,
+                    "Absent"
+                );
+            });
+
+            studentList.appendChild(studentDiv);
         });
 
-        absentButton.addEventListener("click", () => {
-            markAttendance(child.key, student.name, "Absent", presentButton, absentButton);
-        });
-
-        studentList.appendChild(studentDiv);
     });
+
 });
 
-function markAttendance(studentId, name, status, presentButton, absentButton) {
+function markAttendance(studentId, name, status) {
 
     const attendanceRef = ref(
         db,
@@ -111,13 +135,4 @@ function markAttendance(studentId, name, status, presentButton, absentButton) {
         status: status,
         date: todayKey
     });
-
-    presentButton.classList.remove("selected");
-    absentButton.classList.remove("selected");
-
-    if (status === "Present") {
-        presentButton.classList.add("selected");
-    } else {
-        absentButton.classList.add("selected");
-    }
 }
