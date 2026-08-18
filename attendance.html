@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>EduShare - Attendance</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .attendance-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+        }
+
+        .attendance-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .attendance-card h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        select,
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .student {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f4f7ff;
+            border-radius: 10px;
+        }
+
+        .student-name {
+            font-weight: bold;
+        }
+
+        .status-buttons button {
+            border: none;
+            padding: 9px 14px;
+            margin-left: 5px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .present {
+            background: #22c55e;
+            color: white;
+        }
+
+        .absent {
+            background: #ef4444;
+            color: white;
+        }
+
+        .late {
+            background: #f59e0b;
+            color: white;
+        }
+
+        #saveAttendance {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #saveAttendance:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>EduShare</h1>
+    <p>Attendance System</p>
+</header>
+
+<div class="attendance-container">
+
+    <div class="attendance-card">
+
+        <h2>📋 Mark Attendance</h2>
+
+        <div class="controls">
+
+            <select id="subject">
+                <option value="">Select Subject</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Science">Science</option>
+                <option value="English">English</option>
+                <option value="Social Science">Social Science</option>
+                <option value="Computer">Computer</option>
+            </select>
+
+            <input type="date" id="date">
+
+        </div>
+
+        <div id="studentList">
+
+            <div class="student">
+                <span class="student-name">Student 1</span>
+
+                <div class="status-buttons">
+                    <button class="present">Present</button>
+                    <button class="absent">Absent</button>
+                    <button class="late">Late</button>
+                </div>
+            </div>
+
+            <div class="student">
+                <span class="student-name">Student 2</span>
+
+                <div class="status-buttons">
+                    <button class="present">Present</button>
+                    <button class="absent">Absent</button>
+                    <button class="late">Late</button>
+                </div>
+            </div>
+
+            <div class="student">
+                <span class="student-name">Student 3</span>
+
+                <div class="status-buttons">
+                    <button class="present">Present</button>
+                    <button class="absent">Absent</button>
+                    <button class="late">Late</button>
+                </div>
+            </div>
+
+        </div>
+
+        <button id="saveAttendance">
+            💾 Save Attendance
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>
