@@ -5,14 +5,15 @@ import {
     push,
     set,
     onValue
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebasejs/12.1.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const studentName = document.getElementById("studentName");
 const addStudent = document.getElementById("addStudent");
 const studentList = document.getElementById("studentList");
 const today = document.getElementById("today");
 
-const todayKey = new Date().toLocaleDateString("en-CA");
+// Get today's date
+const todayKey = new Date().toISOString().split("T")[0];
 
 today.textContent = new Date().toLocaleDateString(undefined, {
     weekday: "long",
@@ -21,13 +22,16 @@ today.textContent = new Date().toLocaleDateString(undefined, {
     day: "numeric"
 });
 
+// Firebase locations
 const studentsRef = ref(db, "students");
-const todayAttendanceRef = ref(db, `attendance/${todayKey}`);
+const attendanceRef = ref(db, `attendance/${todayKey}`);
 
+// ADD STUDENT
 addStudent.addEventListener("click", () => {
+
     const name = studentName.value.trim();
 
-    if (!name) {
+    if (name === "") {
         alert("Please enter a student name.");
         return;
     }
@@ -41,35 +45,45 @@ addStudent.addEventListener("click", () => {
     studentName.value = "";
 });
 
-studentName.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
+// Press Enter to add student
+studentName.addEventListener("keydown", (event) => {
+
+    if (event.key === "Enter") {
         addStudent.click();
     }
+
 });
 
+// LOAD STUDENTS
 onValue(studentsRef, (snapshot) => {
 
     studentList.innerHTML = "";
 
     if (!snapshot.exists()) {
+
         studentList.innerHTML = `
             <div class="empty">
                 No students added yet.
             </div>
         `;
+
         return;
     }
 
-    onValue(todayAttendanceRef, (attendanceSnapshot) => {
+    // Get today's attendance
+    onValue(attendanceRef, (attendanceSnapshot) => {
 
         studentList.innerHTML = "";
 
         snapshot.forEach((child) => {
 
             const student = child.val();
-            const attendance = attendanceSnapshot.child(child.key).val();
+            const studentId = child.key;
+
+            const attendance = attendanceSnapshot.child(studentId).val();
 
             const studentDiv = document.createElement("div");
+
             studentDiv.className = "student";
 
             studentDiv.innerHTML = `
@@ -80,13 +94,17 @@ onValue(studentsRef, (snapshot) => {
                 <div class="status-buttons">
 
                     <button class="present ${
-                        attendance?.status === "Present" ? "selected" : ""
+                        attendance?.status === "Present"
+                            ? "selected"
+                            : ""
                     }">
                         ✓ Present
                     </button>
 
                     <button class="absent ${
-                        attendance?.status === "Absent" ? "selected" : ""
+                        attendance?.status === "Absent"
+                            ? "selected"
+                            : ""
                     }">
                         ✕ Absent
                     </button>
@@ -101,38 +119,45 @@ onValue(studentsRef, (snapshot) => {
                 studentDiv.querySelector(".absent");
 
             presentButton.addEventListener("click", () => {
+
                 markAttendance(
-                    child.key,
+                    studentId,
                     student.name,
                     "Present"
                 );
+
             });
 
             absentButton.addEventListener("click", () => {
+
                 markAttendance(
-                    child.key,
+                    studentId,
                     student.name,
                     "Absent"
                 );
+
             });
 
             studentList.appendChild(studentDiv);
+
         });
 
     });
 
 });
 
+// SAVE ATTENDANCE
 function markAttendance(studentId, name, status) {
 
-    const attendanceRef = ref(
-        db,
-        `attendance/${todayKey}/${studentId}`
-    );
+    const studentAttendanceRef =
+        ref(db, `attendance/${todayKey}/${studentId}`);
 
-    set(attendanceRef, {
+    set(studentAttendanceRef, {
+
         name: name,
         status: status,
         date: todayKey
+
     });
+
 }
