@@ -1,47 +1,123 @@
-const students = document.querySelectorAll(".student");
+import { db } from "./firebase.js";
 
-students.forEach(student => {
+import {
+    ref,
+    push,
+    set,
+    onValue
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-    const buttons = student.querySelectorAll("button");
+const studentName = document.getElementById("studentName");
+const addStudent = document.getElementById("addStudent");
+const studentList = document.getElementById("studentList");
+const today = document.getElementById("today");
 
-    buttons.forEach(button => {
+const todayKey = new Date().toISOString().split("T")[0];
 
-        button.addEventListener("click", () => {
-
-            buttons.forEach(btn => {
-                btn.style.opacity = "0.4";
-            });
-
-            button.style.opacity = "1";
-
-            student.dataset.status = button.textContent.trim();
-
-        });
-
-    });
-
+today.textContent = new Date().toLocaleDateString(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
 });
 
+const studentsRef = ref(db, "students");
 
-document.getElementById("saveAttendance").addEventListener("click", () => {
+addStudent.addEventListener("click", () => {
+    const name = studentName.value.trim();
 
-    const subject = document.getElementById("subject").value;
-    const date = document.getElementById("date").value;
-
-    if (!subject || !date) {
-        alert("Please select a subject and date.");
+    if (!name) {
+        alert("Please enter a student name.");
         return;
     }
 
-    students.forEach(student => {
+    const newStudent = push(studentsRef);
 
-        const name = student.querySelector(".student-name").textContent;
-        const status = student.dataset.status || "Not Marked";
-
-        console.log(name, status);
-
+    set(newStudent, {
+        name: name
     });
 
-    alert("Attendance saved successfully!");
-
+    studentName.value = "";
 });
+
+studentName.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        addStudent.click();
+    }
+});
+
+onValue(studentsRef, (snapshot) => {
+
+    studentList.innerHTML = "";
+
+    if (!snapshot.exists()) {
+        studentList.innerHTML = `
+            <div class="empty">
+                No students added yet.
+            </div>
+        `;
+        return;
+    }
+
+    snapshot.forEach((child) => {
+
+        const student = child.val();
+
+        const studentDiv = document.createElement("div");
+        studentDiv.className = "student";
+
+        studentDiv.innerHTML = `
+            <div class="student-name">
+                ${student.name}
+            </div>
+
+            <div class="status-buttons">
+
+                <button class="present">
+                    ✓ Present
+                </button>
+
+                <button class="absent">
+                    ✕ Absent
+                </button>
+
+            </div>
+        `;
+
+        const presentButton = studentDiv.querySelector(".present");
+        const absentButton = studentDiv.querySelector(".absent");
+
+        presentButton.addEventListener("click", () => {
+            markAttendance(child.key, student.name, "Present", presentButton, absentButton);
+        });
+
+        absentButton.addEventListener("click", () => {
+            markAttendance(child.key, student.name, "Absent", presentButton, absentButton);
+        });
+
+        studentList.appendChild(studentDiv);
+    });
+});
+
+function markAttendance(studentId, name, status, presentButton, absentButton) {
+
+    const attendanceRef = ref(
+        db,
+        `attendance/${todayKey}/${studentId}`
+    );
+
+    set(attendanceRef, {
+        name: name,
+        status: status,
+        date: todayKey
+    });
+
+    presentButton.classList.remove("selected");
+    absentButton.classList.remove("selected");
+
+    if (status === "Present") {
+        presentButton.classList.add("selected");
+    } else {
+        absentButton.classList.add("selected");
+    }
+}
