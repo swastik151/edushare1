@@ -10,89 +10,119 @@
 
     <style>
         .attendance-container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 40px auto;
-            padding: 25px;
+            padding: 20px;
         }
 
         .attendance-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            background: rgba(10, 25, 55, 0.95);
+            border: 1px solid #2563eb;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.25);
         }
 
         .attendance-card h2 {
-            color: #2563eb;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 10px;
         }
 
-        .controls {
+        .today {
+            text-align: center;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        .add-student {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 25px;
         }
 
-        select,
-        input {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+        .add-student input {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #2563eb;
             font-size: 16px;
         }
 
-        .student {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            margin: 10px 0;
-            background: #f4f7ff;
-            border-radius: 10px;
-        }
-
-        .student-name {
-            font-weight: bold;
-        }
-
-        .status-buttons button {
-            border: none;
-            padding: 9px 14px;
-            margin-left: 5px;
-            border-radius: 7px;
-            cursor: pointer;
-        }
-
-        .present {
-            background: #22c55e;
-            color: white;
-        }
-
-        .absent {
-            background: #ef4444;
-            color: white;
-        }
-
-        .late {
-            background: #f59e0b;
-            color: white;
-        }
-
-        #saveAttendance {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
+        .add-student button {
+            padding: 14px 20px;
             border: none;
             border-radius: 10px;
             background: #2563eb;
             color: white;
-            font-size: 18px;
             cursor: pointer;
+            font-weight: bold;
         }
 
-        #saveAttendance:hover {
-            background: #1d4ed8;
+        .student {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.06);
+            border-radius: 12px;
+        }
+
+        .student-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .status-buttons button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .present {
+            background: #16a34a;
+        }
+
+        .absent {
+            background: #dc2626;
+        }
+
+        .selected {
+            box-shadow: 0 0 0 3px white;
+        }
+
+        #studentList {
+            margin-top: 10px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .student {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .status-buttons button {
+                flex: 1;
+            }
+
+            .add-student {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -108,64 +138,33 @@
 
     <div class="attendance-card">
 
-        <h2>📋 Mark Attendance</h2>
+        <h2>📋 Today's Attendance</h2>
 
-        <div class="controls">
+        <div class="today" id="today"></div>
 
-            <select id="subject">
-                <option value="">Select Subject</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Science">Science</option>
-                <option value="English">English</option>
-                <option value="Social Science">Social Science</option>
-                <option value="Computer">Computer</option>
-            </select>
+        <div class="add-student">
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter student name"
+            >
 
-            <input type="date" id="date">
-
+            <button id="addStudent">
+                ➕ Add Student
+            </button>
         </div>
 
         <div id="studentList">
-
-            <div class="student">
-                <span class="student-name">Student 1</span>
-
-                <div class="status-buttons">
-                    <button class="present">Present</button>
-                    <button class="absent">Absent</button>
-                    <button class="late">Late</button>
-                </div>
+            <div class="empty">
+                Loading students...
             </div>
-
-            <div class="student">
-                <span class="student-name">Student 2</span>
-
-                <div class="status-buttons">
-                    <button class="present">Present</button>
-                    <button class="absent">Absent</button>
-                    <button class="late">Late</button>
-                </div>
-            </div>
-
-            <div class="student">
-                <span class="student-name">Student 3</span>
-
-                <div class="status-buttons">
-                    <button class="present">Present</button>
-                    <button class="absent">Absent</button>
-                    <button class="late">Late</button>
-                </div>
-            </div>
-
         </div>
-
-        <button id="saveAttendance">
-            💾 Save Attendance
-        </button>
 
     </div>
 
 </div>
-<script src="js/attendance.js"></script>
+
+<script type="module" src="js/attendance.js"></script>
+
 </body>
 </html>
